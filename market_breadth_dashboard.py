@@ -9,7 +9,7 @@ st.set_page_config(page_title="Market Breadth Dashboard", layout="wide")
 @st.cache_data
 def load_stock_list():
     try:
-        df = pd.read_csv("stock_list.csv")
+        df = pd.read_csv("nse_stock_list.csv")
         st.write("Loaded stock list:", df.head())  # Debug
         return df.dropna(subset=["symbol", "sector"])
     except Exception as e:
