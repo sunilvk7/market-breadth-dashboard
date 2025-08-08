@@ -16,7 +16,16 @@ def fetch_price_data(symbols):
     end_date = datetime.today()
     start_date = end_date - timedelta(days=250)
     data = yf.download(symbols, start=start_date, end=end_date)
+   if 'Adj Close' not in data.columns and isinstance(data.columns, pd.MultiIndex):
+    adj_close_data = data.loc[:, pd.IndexSlice[:, 'Adj Close']]
+    adj_close_data.columns = [col[0] for col in adj_close_data.columns]  # flatten
+    return adj_close_data
+elif 'Adj Close' in data.columns:
     return data['Adj Close']
+else:
+    st.error("Price data could not be retrieved. Check ticker symbols or try again later.")
+    return pd.DataFrame()
+
 
 stock_df = load_stock_list()
 symbols = stock_df['symbol'].tolist()
